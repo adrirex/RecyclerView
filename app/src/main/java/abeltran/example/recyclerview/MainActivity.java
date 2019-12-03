@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recycler;
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager lManager;
-
+    public boolean crono = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,8 +52,13 @@ public class MainActivity extends AppCompatActivity {
         recycler.setLayoutManager(lManager);
 
         // Crear un nuevo adaptador
-        adapter = new CartasAdapter(items, this);
+        adapter = new CartasAdapter(items, this, crono);
         recycler.setAdapter(adapter);
+
+
+        TextView chrono = (TextView) findViewById (R.id.chrono);
+        Chronometer chronometer = new Chronometer(30000, 1000, chrono);
+        chronometer.start();
 
     }
 }

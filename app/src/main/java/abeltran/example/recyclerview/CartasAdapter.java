@@ -26,14 +26,15 @@ public class CartasAdapter extends RecyclerView.Adapter<CartasAdapter.CartasView
     int cartaGirada = 0;
     boolean noMeToques = false;
     int aciertos;
-    boolean starting = true;
     int time = 30;
     CountDownTimer ct;
     TextView textTimer;
+    boolean crono;
 
-    public CartasAdapter(List<Cartas> items, Context context) {
+    public CartasAdapter(List<Cartas> items, Context context, Boolean crono) {
         this.items = items;
         this.context = context;
+        this.crono = crono;
     }
 
     public  class CartasViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -44,26 +45,26 @@ public class CartasAdapter extends RecyclerView.Adapter<CartasAdapter.CartasView
             super(v);
             imagen = v.findViewById(R.id.imagen);
             imagen.setOnClickListener(this);
+            if(crono){
+                ct = new CountDownTimer(30000,1000) {
+                    @Override
+                    public void onTick(long millisUntilFinished) {
+                        time--;
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        crono= false;
+                    }
+                }.start();
+            }
         }
 
         @SuppressLint("WrongConstant")
         @Override
         public void onClick(View v) {
-            //if(starting){
-            //    starting = false;
-            //  ct = new CountDownTimer(30000,1000) {
-            //      @Override
-            //      public void onTick(long millisUntilFinished) {
-            //          time--;
-            //          textTimer.setText(String.valueOf(time));
-            //      }
 
-            //      @Override
-            //      public void onFinish() {
-            //          Toast.makeText(context, "GAME OVER", Toast.LENGTH_SHORT).show();
-            //      }
-            //  }.start();
-            //}
+            if(crono){
             if(!noMeToques) {
             if(contador < 2 && items.get(getAdapterPosition()).getEstado() == Cartas.Estat.BACK) {
                 cartaGirada = getAdapterPosition();
@@ -99,7 +100,7 @@ public class CartasAdapter extends RecyclerView.Adapter<CartasAdapter.CartasView
                     }, 2000);
                 }
             }
-        }}
+        }}}
     }
 
     @Override
